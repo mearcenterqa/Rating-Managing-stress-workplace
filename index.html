@@ -139,6 +139,10 @@ document.addEventListener("DOMContentLoaded", function(){
 document.getElementById("evaluationForm").addEventListener("submit", function(e){
   e.preventDefault();
 
+  const submitBtn = this.querySelector("button[type='submit']");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "جاري الإرسال...";
+
   const data = new FormData(this);
 
   const templateParams = {
@@ -150,15 +154,17 @@ document.getElementById("evaluationForm").addEventListener("submit", function(e)
   	q4: "لأي مدى وافقت تجربة التدريب توقعاتك ؟:\n" + data.get("q4") + "\n\n",
   	q5: "توصي بتنفيذ الورشة لزملائي؟:\n" + data.get("q5") + "\n\n",
   	suggestions: "مقترحاتك:\n" + data.get("suggestions")
-    };
-
+  };
 
   emailjs.send("service_s58yzam", "template_emcq7hc", templateParams)
     .then(function(response) {
        alert("تم إرسال التقييم بنجاح ✅");
+       // يبقى الزر معطلاً بعد النجاح
     }, function(error) {
        alert("فشل الإرسال ❌، الرجاء الاتصال بالدعم الفني");
        console.error("EmailJS Error:", error);
+       submitBtn.disabled = false;
+       submitBtn.textContent = "إرسال التقييم";
     });
 });
 </script>
